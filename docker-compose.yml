@@ -3,8 +3,8 @@ services:
   iris:
     image: intersystemsdc/irishealth-ml-community:latest
     environment:
-      IRIS_USERNAME: demo
-      IRIS_PASSWORD: demo
+      IRIS_USERNAME: superuser
+      IRIS_PASSWORD: SYS
     restart: always
     hostname: iris
     ports:
