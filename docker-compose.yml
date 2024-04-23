@@ -1,7 +1,7 @@
 version: '0.1'
 services:
   iris:
-    image: intersystemsdc/iris-community:latest
+    image: intersystemsdc/irishealth-ml-community:latest
     environment:
       IRIS_USERNAME: demo
       IRIS_PASSWORD: demo
