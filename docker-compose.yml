@@ -1,12 +1,24 @@
 version: '0.1'
 services:
   iris:
-    image: intersystemsdc/irishealth-ml-community:latest
+    build: ./image-iris
     environment:
-      IRIS_USERNAME: superuser
-      IRIS_PASSWORD: SYS
+      - TZ=CST-8
+      - NAME=iris
+      # - ISC_DATA_DIRECTORY=/dur/irisdata
     restart: always
-    hostname: iris
+    hostname: datafabric
+    container_name: iris-showcase
     ports:
       - 1972:1972
       - 52773:52773
+    deploy:
+      resources:
+        limits:
+          cpus: '4.00'
+          memory: 4096M
+        reservations:
+          cpus: '1.00'
+          memory: 1024M
+    # volumes:
+    #   - ./irisdata:/dur/irisdata
