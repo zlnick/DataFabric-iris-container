@@ -5,7 +5,7 @@
 [Actions]
 CreateResource:Name=%DB_Sample,Description="Sample database"
 CreateDatabase:Name=Sample,Directory=/usr/irissys/mgr/Sample
-CreateNamespace:Name=Sample,Globals=Sample,Interop=0
+CreateNamespace:Name=Sample,Globals=Sample,Interop=1
 
 CreateResource:Name=%DB_Exchange,Description="Exchange database"
 CreateDatabase:Name=Exchange,Directory=/usr/irissys/mgr/Exchange

@@ -31,7 +31,7 @@
 
 iris session $ISC_PACKAGE_INSTANCENAME -U USER <<- EOF
 
-EOF
+EOFdo
 
 echo ""
 echo "Installation complete."
