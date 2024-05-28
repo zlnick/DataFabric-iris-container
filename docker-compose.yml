@@ -3,8 +3,8 @@ services:
   iris:
     build: ./image-iris
     environment:
-      - TZ=CST-8
-      - NAME=iris
+      IRIS_USERNAME: superuser
+      IRIS_PASSWORD: SYS
       # - ISC_DATA_DIRECTORY=/dur/irisdata
     restart: always
     hostname: datafabric
@@ -12,6 +12,10 @@ services:
     ports:
       - 1972:1972
       - 52773:52773
+    command:
+      - -a
+      - iris session iris -U%SYS '##class(Security.Users).UnExpireUserPasswords("*")'
+      - --check-caps false
     deploy:
       resources:
         limits:
