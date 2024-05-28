@@ -22,3 +22,12 @@ services:
           memory: 1024M
     # volumes:
     #   - ./irisdata:/dur/irisdata
+  jupyter:
+    build: ./image-jupyter
+    environment:
+      OPENAI_API_KEY: your-key-goes-here
+      IRIS_HOSTNAME: datafabric
+    restart: always
+    hostname: jupyter
+    ports:
+      - 8888:8888
