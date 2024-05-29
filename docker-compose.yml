@@ -33,5 +33,6 @@ services:
       IRIS_HOSTNAME: datafabric
     restart: always
     hostname: jupyter
+    container_name: jupyter
     ports:
       - 8888:8888
