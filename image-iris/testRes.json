@@ -1,0 +1,38 @@
+{
+    "name": "resource",
+    "resource": {
+        "resourceType": "Condition",
+        "id": "condition-1",
+        "subject": {
+            "reference": "Patient/example"
+        },
+        "code": {
+            "coding": [
+                {
+                    "system": "http://icd10cm.codes",
+                    "code": "Z51.8",
+                    "display": "Postoperative follow-up examination"
+                }
+            ]
+        },
+        "bodySite": [
+            {
+                "coding": [
+                    {
+                        "system": "http://snomed.info/sct",
+                        "code": "361089003",
+                        "display": "Colon structure"
+                    }
+                ]
+            }
+        ],
+        "clinicalStatus": {
+            "coding": [
+                {
+                    "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+                    "code": "dead"
+                }
+            ]
+        }
+    }
+}
