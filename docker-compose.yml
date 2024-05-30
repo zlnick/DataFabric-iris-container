@@ -16,20 +16,11 @@ services:
       - -a
       - iris session iris -U%SYS '##class(Security.Users).UnExpireUserPasswords("*")'
       - --check-caps false
-    deploy:
-      resources:
-        limits:
-          cpus: '4.00'
-          memory: 4096M
-        reservations:
-          cpus: '1.00'
-          memory: 1024M
     # volumes:
     #   - ./irisdata:/dur/irisdata
   jupyter:
     build: ./image-jupyter
     environment:
-      OPENAI_API_KEY: your-key-goes-here
       IRIS_HOSTNAME: datafabric
     restart: always
     hostname: jupyter

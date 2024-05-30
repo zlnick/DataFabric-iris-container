@@ -1,3 +1,5 @@
 .DS_Store
 image-jupyter/apikey
 .venv
+.vscode
+DataFabric-iris-container.code-workspace

@@ -1,0 +1,6 @@
+ipykernel
+langchain
+langchain_openai
+langchainhub
+httpx_sse
+zhipuai

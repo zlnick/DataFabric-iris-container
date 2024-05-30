@@ -14,7 +14,7 @@ RUN pip install -r requirements.txt
 RUN pip install jupyterlab-execute-time
 
 COPY apikey "${HOME}"
-COPY notebooks "${HOME}/notebooks"
+COPY work "${HOME}/work"
 
 # run without password
 CMD start.sh jupyter lab --LabApp.token=''
