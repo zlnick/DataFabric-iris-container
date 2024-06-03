@@ -1,16 +1,17 @@
-Class ChatGLM.logger.ExtractionLog Extends (%Persistent, ChatGLM.logger.ExtractionLogSerial)
+Class ChatGLM.logger.ExtractionLog Extends %Persistent
 {
 
-Index idxSessionId On sessionId [ Unique ];
+Property sessionId As %String;
 
-ClassMethod GetPersistentEntity(serial As ChatGLM.logger.ExtractionLogSerial, Output entity As ChatGLM.logger.ExtractionLog) As %Status
-{
-    Set sc = $$$OK
-    Set entity = ##Class(ChatGLM.logger.ExtractionLog).%New()
-    Set sc = serial.%JSONExportToStream(.stream)
-    Set sc = entity.%JSONImport(stream)
-    Quit sc
-}
+Property batchId As %String;
+
+Property TextId As %String;
+
+Property event As %String(VALUELIST = ",rev,txtSent,entRev,fhirReq,fhirResp");
+
+Property eventTime As %Library.TimeStamp;
+
+Property context As %String;
 
 Storage Default
 {
@@ -22,28 +23,16 @@ Storage Default
 <Value>sessionId</Value>
 </Value>
 <Value name="3">
-<Value>originalText</Value>
+<Value>batchId</Value>
 </Value>
 <Value name="4">
-<Value>textReceiveTime</Value>
+<Value>event</Value>
 </Value>
 <Value name="5">
-<Value>entitiesText</Value>
+<Value>eventTime</Value>
 </Value>
 <Value name="6">
-<Value>entitiesExtractedTime</Value>
-</Value>
-<Value name="7">
-<Value>fhirJosnText</Value>
-</Value>
-<Value name="8">
-<Value>fhirGeneratedTime</Value>
-</Value>
-<Value name="9">
-<Value>status</Value>
-</Value>
-<Value name="10">
-<Value>errorLog</Value>
+<Value>context</Value>
 </Value>
 </Data>
 <DataLocation>^ChatGLM.logger.ExtractionLogD</DataLocation>

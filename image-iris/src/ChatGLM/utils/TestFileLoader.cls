@@ -11,13 +11,20 @@ ClassMethod loadTrainFile(filePath As %String) As %Status
             W "No text found for extraction",!
             Return sc
         }
+        #Dim batchInst As ChatGLM.logger.ExtractionBatch = ##Class(ChatGLM.logger.ExtractionBatch).%New() 
+        Set batchInst.FilePath = filePath
+        Set batchInst.StartTime = $ZDATETIME($ZTIMESTAMP,3,,9)
+        Set batchInst.TextCount = fileJsonArray.size()
+        Set sc = batchInst.%Save()
         while iter.%GetNext(.key, .value){
             #Dim node As %DynamicObject = value
-            Set text = node.text
             #Dim serviceInstance As Ens.BusinessService = ""
             Set sc = ##Class(Ens.Director).CreateBusinessService("ChatGLM.services.ExtractInfoService",.serviceInstance)
-            Set sc = serviceInstance.OnProcessInput(text,.resp)
-            //w "Line:"_text,!
+            #Dim req As ChatGLM.messages.ExtractionTaskRequest = ##Class(ChatGLM.messages.ExtractionTaskRequest).%New()
+            Set req.BatchId = batchInst.%Id()
+            Set req.TextId = node.id
+            Set req.Text = node.text
+            Set sc = serviceInstance.OnProcessInput(req,.resp)
         }
         Return sc
 }

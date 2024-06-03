@@ -9,8 +9,7 @@ Parameter SETTINGS = "TargetConfigNames:Basic:selector?multiSelect=1&context={En
 Method OnProcessInput(pInput As %RegisteredObject, Output pOutput As %RegisteredObject) As %Status
 {
     Set sc = $$$OK
-    #Dim req as Ens.StringRequest = ##Class(Ens.StringRequest).%New()
-    Set req.StringValue = pInput
+    #Dim req as ChatGLM.messages.ExtractionTaskRequest = pInput
     For iTarget=1:1:$L(..TargetConfigNames, ",") { 
         Set tOneTarget=$ZStrip($P(..TargetConfigNames,",",iTarget),"<>W")  Continue:""=tOneTarget
         Set tSC1=..SendRequestAsync(tOneTarget,req)  Set:$$$ISERR(tSC1) tSC=$$$ADDSC(sc,tSC1)
