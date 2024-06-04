@@ -10,8 +10,18 @@ Method OnProcessInput(pInput As %RegisteredObject, Output pOutput As %Registered
 {
     Set sc = $$$OK
     #Dim req as ChatGLM.messages.ExtractionTaskRequest = pInput
-    For iTarget=1:1:$L(..TargetConfigNames, ",") { 
-        Set tOneTarget=$ZStrip($P(..TargetConfigNames,",",iTarget),"<>W")  Continue:""=tOneTarget
+    /*#Dim log AS ChatGLM.logger.ExtractionLogSerial = ##Class(ChatGLM.logger.ExtractionLogSerial).%New()
+    Set log.batchId = req.BatchId
+    Set log.TextId = req.TextId
+    Set log.context = req.Text
+    Set log.event = "rev"
+    Set log.eventTime = $ZDATETIME($ZTIMESTAMP,3,,9)
+    Set logReq = ##Class(ChatGLM.messages.ExtractionLogRequest).%New()
+    Set logReq.log = log
+    Set tSC1=..SendRequestAsync("ChatGLM.operations.ExecLogOperation",logReq)  Set:$$$ISERR(tSC1) tSC=$$$ADDSC(sc,tSC1)*/
+    
+    For iTarget=1:1:$LENGTH(..TargetConfigNames, ",") { 
+        Set tOneTarget=$ZSTRIP($PIECE(..TargetConfigNames,",",iTarget),"<>W")  Continue:""=tOneTarget
         Set tSC1=..SendRequestAsync(tOneTarget,req)  Set:$$$ISERR(tSC1) tSC=$$$ADDSC(sc,tSC1)
         Set pOutput  = ##Class(Ens.StringResponse).%New()
         Set pOutput.StringValue = "Sent"

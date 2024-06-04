@@ -6,7 +6,7 @@ XData ProductionDefinition
 <Production Name="FHIRSERVERPKG.FoundationProduction" TestingEnabled="true" LogGeneralTraceEvents="false">
   <Description></Description>
   <ActorPoolSize>1</ActorPoolSize>
-  <Item Name="ExtractEntityOperation" Category="" ClassName="ChatGLM.operations.ChatClientOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="ExtractEntityOperation" Category="" ClassName="ChatGLM.operations.ChatClientOperation" PoolSize="2" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="prompt">"""
 你是一个医疗行业数据提取助手。你能从从中文电子病历中挖掘出临床发现事件。即给定一段现病史或者医学影像所见报告，要求从中抽取临床发现事件的四个属性: 解剖部位、主体词、描述词，以及发生状态:
     主体词：指患者的电子病历中的疾病名称或者由疾病引发的症状，也包括患者的一般情况如饮食，二便，睡眠等。主体词尽可能完整并是专有名词，比如“麻木， 疼痛，发烧，囊肿”等；专有名词，如“头晕”，晕只能发生在头部，“胸闷”，闷只能发生在胸部，所以不进行拆分，保留完整的专有名词。涉及泛化的症状不做标注，如“无其他不适”，句子中的“不适”不需要标注，只针对具体的进行标注。注意：有较小比例的主体词会映射到ICD标准术语，所使用的ICD的版本为“国际疾病分类 ICD-10北京临床版v601.xIsx”(见下载文件)。
@@ -21,46 +21,31 @@ XData ProductionDefinition
         character: 描述词，列表结构，如果没有描述词，默认为[]
         anatomy_list: 解剖部位，列表结构，如果没有解剖部位，默认为[]
 例如，对这样一段文本描述：
-遂就诊于我院门诊行上消化道钡餐检查提示：右肺门结节及右肺上叶大叶性肺炎，胃蠕动减弱，血图分析提示hb 65g/L,今为求进一步诊治遂入我院入我科。
+患者2+年前无明显诱因出现大便次数增多，约5-6次/天，量少呈糊状，无黑便、脓血便，偶有粘液便，伴肛门坠胀、里急后重感，遂到我院就诊，直肠指诊及腹部ct提示直肠癌，于2013.6.14日下午在全麻下行冰冻活检+剖腹探查+直肠癌根治术(miles)+放射性粒子植入术,手术顺利，术后病检示：1.（直肠）送检肠壁组织显示炎症改变，未见癌。
 你将使用这样的json记录临床发现事件：
 {
-    "id": 1744,
-    "text": "遂就诊于我院门诊行上消化道钡餐检查提示：右肺门结节及右肺上叶大叶性肺炎，胃蠕动减弱，血图分析提示hb 65g/L,今为求进一步诊治遂入我院入我科。",
+    "id": 389,
+    "text": "术后患者恢复可，伤口无感染渗液，愈合情况良好。",
     "event": [
-      {
-        "core_name": "结节",
-        "tendency": "",
-        "character": [],
-        "anatomy_list": [
-          "右肺门"
-        ]
-      },
-      {
-        "core_name": "炎",
-        "tendency": "",
-        "character": [
-          "大叶性"
-        ],
-        "anatomy_list": [
-          "右肺上叶"
-        ]
-      },
-      {
-        "core_name": "减弱",
-        "tendency": "",
-        "character": [
-          "蠕动"
-        ],
-        "anatomy_list": [
-          "胃"
-        ]
-      }
+        {
+            "core_name": "感染",
+            "tendency": "否定",
+            "character": [],
+            "anatomy_list": []
+        },
+        {
+            "core_name": "渗液",
+            "tendency": "否定",
+            "character": [],
+            "anatomy_list": []
+        }
     ]
-  }
+}
 不要提供任何解释，也不要返回任何无关文字，只返回回答变量。
 """</Setting>
     <Setting Target="Host" Name="apikey">b0e7ac946daa9ad65813bae72cea7ea8.bPtijYK8y0NrGbw2</Setting>
     <Setting Target="Host" Name="FailureTimeout">60</Setting>
+    <Setting Target="Host" Name="promptFile">/home/irisowner/irisdev/data/ExtractionPrompt.txt</Setting>
   </Item>
   <Item Name="GetFHIROperation" Category="" ClassName="ChatGLM.operations.ChatClientOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="apikey">b0e7ac946daa9ad65813bae72cea7ea8.bPtijYK8y0NrGbw2</Setting>
@@ -107,18 +92,17 @@ XData ProductionDefinition
 不要生成Encounter资源。
 """</Setting>
     <Setting Target="Host" Name="FailureTimeout">60</Setting>
+    <Setting Target="Host" Name="promptFile">/home/irisowner/irisdev/data/FHIRPrompt.txt</Setting>
   </Item>
   <Item Name="HS.FHIRServer.Interop.Service" Category="" ClassName="HS.FHIRServer.Interop.Service" PoolSize="0" Enabled="false" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
   </Item>
   <Item Name="HS.FHIRServer.Interop.Operation" Category="" ClassName="HS.FHIRServer.Interop.Operation" PoolSize="1" Enabled="false" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
   </Item>
-  <Item Name="ChatGLM.services.ExtractInfoService" Category="" ClassName="ChatGLM.services.ExtractInfoService" PoolSize="0" Enabled="false" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="ChatGLM.services.ExtractInfoService" Category="" ClassName="ChatGLM.services.ExtractInfoService" PoolSize="0" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="TargetConfigNames">ChatGLM.processes.ExtractInfoProcess</Setting>
   </Item>
   <Item Name="ChatGLM.processes.ExtractInfoProcess" Category="" ClassName="ChatGLM.processes.ExtractInfoProcess" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="FailureTimeout">1200</Setting>
-  </Item>
-  <Item Name="ChatGLM.operations.ExecLogOperation" Category="" ClassName="ChatGLM.operations.ExecLogOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
   </Item>
 </Production>
 }

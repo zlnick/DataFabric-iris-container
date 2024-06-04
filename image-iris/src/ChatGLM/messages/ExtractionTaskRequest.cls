@@ -5,7 +5,7 @@ Property BatchId As %Integer;
 
 Property TextId As %String;
 
-Property Text As %String;
+Property Text As %String(MAXLEN = 4096);
 
 Storage Default
 {

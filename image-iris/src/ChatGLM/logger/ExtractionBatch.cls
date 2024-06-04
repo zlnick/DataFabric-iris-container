@@ -1,7 +1,7 @@
 Class ChatGLM.logger.ExtractionBatch Extends %Persistent
 {
 
-Property FilePath As %String;
+Property FilePath As %String(MAXLEN = 128);
 
 Property TextCount As %Integer;
 

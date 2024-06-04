@@ -16,6 +16,7 @@ ClassMethod loadTrainFile(filePath As %String) As %Status
         Set batchInst.StartTime = $ZDATETIME($ZTIMESTAMP,3,,9)
         Set batchInst.TextCount = fileJsonArray.size()
         Set sc = batchInst.%Save()
+
         while iter.%GetNext(.key, .value){
             #Dim node As %DynamicObject = value
             #Dim serviceInstance As Ens.BusinessService = ""
@@ -45,6 +46,14 @@ ClassMethod testValidate(filePath As %String) As %Status
             WRITE "Data: ",exp.Data,!!
         }
         Return sc
+}
+
+ClassMethod clearLogs() As %Status
+{
+    Set sc = $$$OK
+    Set sc = ##Class(ChatGLM.logger.ExtractionBatch).%KillExtent()
+    Set sc = ##Class(ChatGLM.logger.ExtractionLog).%KillExtent()
+    Quit sc
 }
 
 }

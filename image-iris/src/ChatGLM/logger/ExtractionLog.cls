@@ -1,17 +1,5 @@
-Class ChatGLM.logger.ExtractionLog Extends %Persistent
+Class ChatGLM.logger.ExtractionLog Extends (%Persistent, ChatGLM.logger.ExtractionLogSerial)
 {
-
-Property sessionId As %String;
-
-Property batchId As %String;
-
-Property TextId As %String;
-
-Property event As %String(VALUELIST = ",rev,txtSent,entRev,fhirReq,fhirResp");
-
-Property eventTime As %Library.TimeStamp;
-
-Property context As %String;
 
 Storage Default
 {
@@ -26,13 +14,16 @@ Storage Default
 <Value>batchId</Value>
 </Value>
 <Value name="4">
-<Value>event</Value>
+<Value>TextId</Value>
 </Value>
 <Value name="5">
-<Value>eventTime</Value>
+<Value>Text</Value>
 </Value>
 <Value name="6">
-<Value>context</Value>
+<Value>Entites</Value>
+</Value>
+<Value name="7">
+<Value>FHIRText</Value>
 </Value>
 </Data>
 <DataLocation>^ChatGLM.logger.ExtractionLogD</DataLocation>

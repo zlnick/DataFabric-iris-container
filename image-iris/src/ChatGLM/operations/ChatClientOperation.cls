@@ -7,22 +7,30 @@ Parameter INVOCATION = "Queue";
 Property glmClient As %SYS.Python;
 
 /// System level prompt for the dialog
-Property prompt As %String(MAXLEN = 2048) [ Required ];
+Property promptFile As %String(MAXLEN = 128) [ Required ];
+
+/// Prompt Content
+Property prompt As %String(MAXLEN = 4096);
 
 /// apikey to connect to ChatGLM
 Property apikey As %String(MAXLEN = 128) [ Required ];
 
-Parameter SETTINGS = "prompt:Basic,apikey:Basic";
+Parameter SETTINGS = "promptFile:Basic,apikey:Basic";
 
 Method OnInit() As %Status
 {
    #dim sc As %Status = $$$OK
-   try {
-      do ..clientInit(..apikey)
-   } catch ex {
-      set sc = ex.AsStatus()
+   Try {
+      Set stream=##class(%Stream.FileCharacter).%New()
+      Set sc=stream.LinkToFile(..promptFile)
+      While 'stream.AtEnd {
+         Set ..prompt=stream.Read()
+      }
+      Do ..clientInit(..apikey)
+   } Catch ex {
+      Set sc = ex.AsStatus()
    }
-   quit sc
+   Quit sc
 }
 
 /// Connect to ChatGLM
@@ -35,13 +43,13 @@ Method clientInit(apikey) [ Language = python ]
 Method OnMessage(request As Ens.StringContainer, Output response As Ens.StringContainer) As %Status
 {
    #dim sc As %Status = $$$OK
-   try {
-      set response = ##class(Ens.StringContainer).%New(..Chat(request.StringValue))
-   } catch ex {
-      set sc  = ex.AsStatus()
+   Try {
+      Set response = ##class(Ens.StringContainer).%New(..Chat(request.StringValue))
+   } Catch ex {
+      Set sc  = ex.AsStatus()
    }
    
-   return sc
+   Return sc
 }
 
 Method Chat(msg As %String) [ Language = python ]
@@ -59,7 +67,11 @@ Method Chat(msg As %String) [ Language = python ]
    entity_payload=response.choices[0].message.content
    json_block_pattern=r"```json\n?|```"
    entity_jsonString=re.sub(json_block_pattern,'',entity_payload,flags=re.DOTALL)
-   return entity_jsonString
+   start_index = entity_jsonString.find('{')
+   end_index = entity_jsonString.rfind('}') + 1
+   json_string = entity_jsonString[start_index:end_index]
+
+   return json_string
 }
 
 }
