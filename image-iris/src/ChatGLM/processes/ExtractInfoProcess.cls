@@ -46,7 +46,7 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
 <![CDATA[ Set context.log.Entites = context.entitiyString
  Do context.log.%Save()]]>
 </code>
-<call name='获取FHIR资源数组' target='GetFHIROperation' async='0' xpos='200' ypos='550' >
+<call name='获取FHIR资源数组' target='GetFHIROperation' async='0' xpos='200' ypos='550' disabled="true">
 <request type='Ens.StringContainer' >
 <assign property="callrequest.StringValue" value="context.entitiyString" action="set" languageOverride="" />
 </request>
@@ -54,7 +54,7 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
 <assign property="context.fhirArrayString" value="callresponse.StringValue" action="set" languageOverride="" />
 </response>
 </call>
-<code name='生成日志 - 获得FHIR' xpos='200' ypos='650' >
+<code name='生成日志 - 获得FHIR' xpos='200' ypos='650' disabled="true">
 <![CDATA[  Set context.log.FHIRText = context.fhirArrayString
  Do context.log.%Save()]]>
 </code>
