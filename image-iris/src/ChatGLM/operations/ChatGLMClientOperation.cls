@@ -1,4 +1,4 @@
-Class ChatGLM.operations.ChatClientOperation Extends Ens.BusinessOperation
+Class ChatGLM.operations.ChatGLMClientOperation Extends Ens.BusinessOperation
 {
 
 Parameter INVOCATION = "Queue";
@@ -27,6 +27,8 @@ Method OnInit() As %Status
          Set ..prompt=stream.Read()
       }
       Do ..clientInit(..apikey)
+      Set rtnResp = ..initPrompt()
+      $$$TRACE(..prompt)
    } Catch ex {
       Set sc = ex.AsStatus()
    }
@@ -38,6 +40,22 @@ Method clientInit(apikey) [ Language = python ]
 {
    from zhipuai import ZhipuAI
    self.glmClient = ZhipuAI(api_key=apikey)
+}
+
+Method initPrompt() [ Language = python ]
+{
+   import json,re
+   response = self.glmClient.chat.completions.create(
+    model="glm-4", 
+    messages=[
+        {"role": "system", "content": self.prompt},
+        {"role": "user", "content": "测试"}
+    ],
+    temperature=0.01,
+    max_tokens=4096
+   )
+   entity_payload=response.choices[0].message.content
+   return entity_payload
 }
 
 Method OnMessage(request As Ens.StringContainer, Output response As Ens.StringContainer) As %Status
@@ -58,8 +76,7 @@ Method Chat(msg As %String) [ Language = python ]
    response = self.glmClient.chat.completions.create(
     model="glm-4", 
     messages=[
-        {"role": "system", "content": self.prompt},
-        {"role": "user", "content": msg},
+        {"role": "user", "content": msg}
     ],
     temperature=0.01,
     max_tokens=4096
