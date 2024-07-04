@@ -54,7 +54,7 @@ Method GetFHIR(pRequest As TextHandler.messages.ExtractFHIRRequest, Output pResp
       If $IsObject(tHttpResponse) {
          // Instantiate the response object
          Set pResponse = ##class(TextHandler.messages.ExtractFHIRResponse).%New()
-         Set pResponse.FHIRPayload = tHttpResponse.Data.Read()
+         Set pResponse.FHIRPayload = ..GetJsonString(tHttpResponse.Data.Read())
        }
    }catch{
        Set tSC=$$$SystemError
